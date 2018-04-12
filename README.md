@@ -1,7 +1,7 @@
 # peer2peer
 A peer to peer messaging mini-server (Single Page Application) using node.js, express.js, and socket.io
 
-## C'est l'extension (Le projet 2) de ![Courriel](https://github.com/zenAndroid/courriel).
+## C'est l'extension (Le projet 2) de [Courriel](https://github.com/zenAndroid/courriel).
 
 1. Accueil
 2. Liste de messages
