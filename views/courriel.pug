@@ -1,0 +1,89 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        meta(name="viewport",content="width=device-width, initial-scale=1.0")
+        title Project
+        link(rel="stylesheet",href="main.css",type="text/css")
+        link(rel="stylesheet",href="form.css",type="text/css")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js")
+        script(src="monScript.js")
+        script(defer).
+                var pseudo = prompt("Votre pseudonyme :");
+                socket.emit('logIn',pseudo);
+    body
+        div.container
+            header Courriel
+            div#main
+                nav
+                    ul
+                        li 
+                            a(onclick="afficherAcceuil()") Acceuil
+                        li 
+                            a(onclick="afficherMessages()") Liste de messages
+                        li 
+                            a(onclick="afficherNouveau()") Nouveau message
+                        li 
+                            a(onclick="afficherAdresses()") Carnet d'adresse
+                section#acceuil
+                    h1 Interface web pour un système de messagerie (courriel)
+                    p <code>Courriel</code> est un système de messagerie pair-à-pair, c.-à-d., sans serveur centrale.
+                    p Le projet <code>courriel</code> est séparé en deux parties:
+                    ol
+                        li  Projet 1: Interface graphique pour le courriel (code en html/css/js à exécuter par un navigateur).
+                        li  Projet 2: Un mini-serveur permettant le partage (distribution) des courriels (messages) entre plusieurs utilisateurs.
+                    p L'interface WEB devrait pouvoir:
+                    ol
+                        li Visualiser la liste de messages
+                        li Composer un nouveau message.
+                        li Visualiser et rechercher le carnet d'adresse
+                section#messages
+                    h1 Liste de messages
+                    div.formulaire
+                        fieldset
+                            legend Envoi du message (élément temporaire pour tester la fonction 
+                                | javascript)
+                            div#forminput
+                                span#first Auteur :
+                                input(type="text",id="auteur")
+                            div#forminput
+                                span#second Message :
+                                textarea(id="messages_body",rows="5")
+                            div#forminput
+                                span#third
+                                input(type="button",onclick="ajouterMessage()",value="Envoyer",id="submit")
+                    table#tableDeMessages
+                        tr
+                            th Auteur
+                            th Contenu du message
+                section#nouveau
+                    h1 Nouveau message
+                    div.formulaire
+                        fieldset
+                            legend Envoi du message
+                            div#forminput
+                                span#first Destinataire :
+                                input(type="text",id="dest")
+                            div#forminput
+                                span#second Message :
+                                textarea(id="body",rows="15")
+                            div#forminput
+                                span#third
+                                input(id="submit",type="button",onclick="envoyerMessage()",value="Envoyer")
+                section#contacts
+                    h1 Liste de contacts
+                    ul#listeContact
+                        li johndoe
+                        li toto
+                        li jane
+                    fieldset
+                        legend Ajout d'un contact
+                        div#flexform
+                            span(id="label") Pseudonyme du contact :
+                            div#pseudoform
+                                input(type="text",id="pseudo")
+                                input(type="button",onclick="ajouterContact()",value="Ajouter")
+            footer 
+                | Copyright © 2018 
+                a(href="https://github.com/zenAndroid/courriel") zenAndroid
+                | . All Rights Reserved.

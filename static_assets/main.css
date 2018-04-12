@@ -1,0 +1,108 @@
+@font-face{
+    font-family : 'Hermit';
+    src         : url('Hermit-medium.otf');
+}
+#acceuil{
+    display     : block;
+    font-family : 'Hermit';
+    line-height : 1.5em;
+}
+#nouveau{
+    display     : none;
+    font-family : 'Hermit';
+}
+#messages{
+    display     : none;
+    font-family : 'Hermit';
+}
+#contacts{
+    display     : none;
+    font-family : 'Hermit';
+}
+.container{                     /* The container of ALL the elements */
+    display        : flex;
+    flex-direction : column;
+    min-height     : 95vh
+}
+
+#main{                          /* The container of the navigation and the main content, i think */
+    display   : flex;
+    flex-grow : 1 ;
+}
+html{
+    color  : #BDB891;
+}
+
+header, footer{
+    background-color: #253d00;
+    background-image: url(black-linen.png);
+    padding    : .5rem;
+    text-align : center;
+    font-size  : 2rem;
+    font-family: 'Hermit';
+}
+
+body{
+    background : black;
+}
+
+nav{
+    background-color: #170227;
+    background-image: url(3px-tile.png);
+    flex       : 1;
+    padding    : 1rem;
+    text-align : center;
+    font-family: 'Hermit';
+}
+
+section{
+    background-color: #29004f;
+    background-image: url(3px-tile.png);
+    flex-grow  : 1;
+    flex       : 9;
+    padding    : 1rem;
+    overflow   : auto;
+}
+
+nav ul{
+    list-style-type : none;
+    padding         : 0;
+    background-color: #7b0094;
+    background-image: url("black-twill.png");
+}
+
+nav li a{
+    cursor: pointer;
+    display         : block;
+    color           : #50f47b;
+    text-decoration : none;
+    padding         : 8px 16px;
+    border          : 1px solid black;
+}
+
+nav li a:hover{
+    background : #588;
+    color      : white;
+}
+
+table{
+    width: 100%;
+}
+table,td,th{
+    border: 1px solid;
+    border-collapse: collapse;
+}
+td,th{
+    padding: 0.5em;
+}
+@media only screen and (max-width:450px){
+    #main{
+        flex-direction: column;
+    }
+    footer{
+        font-size: .75rem;
+    }
+    nav {
+        font-size: .5em;
+    }
+}

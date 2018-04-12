@@ -1,0 +1,29 @@
+.formulaire{
+    background-color: #3b224f;
+    background-image: url(3px-tile.png);
+    margin-bottom: .5rem;
+    padding        : .5rem;
+    display        : flex;
+    flex-direction : column;
+}
+#forminput{
+    display : flex;
+    padding : 5px;
+}
+#first,
+#third,
+#second {
+    flex: 1;
+}
+#forminput input,
+#forminput textarea {
+    flex: 5;
+}
+#submit{
+    flex: 1;
+}
+@media (max-width:380px){
+    #finput,#sinput{
+        flex-direction: column;
+    }
+}
