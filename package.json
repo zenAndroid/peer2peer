@@ -1,0 +1,17 @@
+{
+  "name": "projet_2",
+  "version": "1.0.0",
+  "description": "``Courriel`` est un système de messagerie pair-à-pair, c.-à-d., sans serveur centrale.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "nodemon": "^1.17.3",
+    "pug": "^2.0.3",
+    "socket.io": "^2.1.0"
+  }
+}
