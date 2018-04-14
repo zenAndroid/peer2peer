@@ -17,25 +17,24 @@ app.get('/', (req, res) => {
 io.on('connection', function (socket) { // Quand un nouveau 'client' se connecte !
     console.log('a user connected !');
     // actualiser_liste_pairs();
-    socket.on('envoi-message', (msg) => { // Evenement d'un evoie de message
-        tousLesMessages.push(msg); // ajout du message vers la variable globale qui retient les message
-        for (var i = 0; i < tousLesMessages.length; i++) { // "Debugging purposes only"
-            console.log("Destinataire : " + tousLesMessages[i].dest);
-            console.log("Corps du message :" + tousLesMessages[i].body);
-        }
+    socket.on('envoi-message', (msg) => {
+
     });
-    socket.on('logIn', (pseudo) => { // Detecte qaund un client entre son pseudo TODO voir si le pseudo est dans la liste existante, 
+    socket.on('logIn', (pseudo, stringId) => { // Detecte qaund un client entre son pseudo TODO voir si le pseudo est dans la liste existante, 
         // si oui chercher ses messages
-        var pair = {
-            "id": id++,
-            "pseudo": pseudo
-        };
-        lesPairs.push(pair); // Ajout du nouvel utilisateur TODO fix this so that only new users are added
-        // rs collectionner_messages(pair);
-        lesPairs.forEach((peer) => { // "Debugging purposes only"
-            console.log("Peer name : " + peer.pseudo + ".");
-            console.log("Peer id   : " + peer.id + ".")
-        });
+        if(pseudo){
+            if(!stringId){
+                // New peer
+            }
+            else{
+                // Existing peer, maybe , should check his existence.
+                var peer = {
+                    "peer_pseudo" : pseudo,
+                    "id" : Number(stringId)
+                }
+                verifyExistence(peer);
+            }
+        }
     });
 });
 http.listen(3030, () => {
