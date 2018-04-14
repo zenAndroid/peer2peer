@@ -20,7 +20,7 @@ socket.on('test', () => {
     });
 })
 
-socket.on("updateSelect",(peer)=>{
+socket.on('updateSelect',(peer)=>{
     appendPeerSelect(peer);
 })
 

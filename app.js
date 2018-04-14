@@ -27,7 +27,7 @@ var verifyExistence = (peer) => {
 }
 var succesfulLogin = (socket) => {
     lesPairs.forEach((p) => {
-        socket.emit('updateSelect', p)
+        io.emit('updateSelect', p)
     })
 }
 io.on('connection', function (socket) {
