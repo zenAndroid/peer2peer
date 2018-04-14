@@ -1,6 +1,18 @@
 var socket = io();
-
-
+// Events that will be recieved from the server
+socket.on('added',(peer)=>{
+    alert('Added new peer');
+    alert(peer.peer_pseudo);
+    alert(peer.id)
+});
+socket.on('exists',(peer)=>{
+    alert('Peer exists')
+    alert(peer.peer_pseudo);
+    alert(peer.id)
+});
+socket.on('peerNotFound',(p)=>{
+    alert('peerNotFound');
+}); 
 function afficherAcceuil() {
     document.getElementById('acceuil').style.display = "block";
     document.getElementById('nouveau').style.display = "none";

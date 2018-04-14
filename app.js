@@ -1,4 +1,5 @@
 var express = require("express");
+var fs = require('fs'); // for persistance
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -15,15 +16,18 @@ app.get('/', (req, res) => {
 });
 
 var successfulLogin = (peer) => {
-console.log("at succesfulLogin");
+    console.log("at succesfulLogin");
 };
 
 var verifyExistence = (peer) => {
-    lesPairs.forEach((pair) => {
-        if (pair == peer) {
-            return true; // Peer exists, returning,
+    var i = 0;
+    var found = false;
+    for (i = 0; i < lesPairs.length; i++) {
+        if (lesPairs[i].peer_pseudo == peer.peer_pseudo && lesPairs[i].id == peer.id) {
+            found = true;
         }
-    })
+    }
+    return found;
 }
 
 io.on('connection', function (socket) { // Quand un nouveau 'client' se connecte !
@@ -34,24 +38,26 @@ io.on('connection', function (socket) { // Quand un nouveau 'client' se connecte
     });
     socket.on('logIn', (pseudo, stringId) => {
         if (pseudo) {
-            if (!stringId) {                 // New peer
+            if (!stringId) { // New peer
                 var new_peer = {
                     "peer_pseudo": pseudo,
                     "id": id++
                 };
                 lesPairs.push(new_peer);
-            } else {                         // Existing peer, maybe , should check his existence.
+                socket.emit('added', new_peer);
+            } else { // Existing peer, maybe , should check his existence.
                 var peer = {
                     "peer_pseudo": pseudo,
                     "id": Number(stringId)
                 }
                 if (verifyExistence(peer)) { // peer exists
-                    successfulLogin(peer);   // Do the normal stuff ie : Collect messages and such
+                    successfulLogin(peer); // Do the normal stuff ie : Collect messages and such
+                    socket.emit('exists', peer);
                 } else {
                     socket.emit('peerNotFound');
                 }
             }
-        }else{
+        } else {
             socket.emit('pseudoMissing')
         }
     });
