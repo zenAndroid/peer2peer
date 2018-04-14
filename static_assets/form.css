@@ -19,7 +19,7 @@
 }
 
 #forminput input,
-#mySelect,
+#peerSelect,
 #forminput textarea {
     flex: 5;
 }

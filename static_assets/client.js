@@ -1,18 +1,39 @@
 var socket = io();
 // Events that will be recieved from the server
-socket.on('added',(peer)=>{
+socket.on('added', (peer) => {
     alert('Added new peer');
     alert(peer.peer_pseudo);
     alert(peer.id)
 });
-socket.on('exists',(peer)=>{
+socket.on('exists', (peer) => {
     alert('Peer exists')
     alert(peer.peer_pseudo);
     alert(peer.id)
 });
-socket.on('peerNotFound',(p)=>{
+socket.on('peerNotFound', (p) => {
     alert('peerNotFound');
-}); 
+});
+socket.on('test', () => {
+    appendPeerSelect({
+        "peer_pseudo": "amine",
+        "id": 9001
+    });
+})
+
+socket.on("updateSelect",(peer)=>{
+    appendPeerSelect(peer);
+})
+
+function appendPeerSelect(peer) {
+    var pseudo = peer.peer_pseudo;
+    var id = peer.id;
+    var select = document.getElementById('peerSelect');
+    var option = document.createElement("option");
+    option.setAttribute("value", id);
+    option.text = pseudo + " avec l'id " + id;
+    select.add(option);
+}
+
 function afficherAcceuil() {
     document.getElementById('acceuil').style.display = "block";
     document.getElementById('nouveau').style.display = "none";
@@ -58,7 +79,7 @@ function envoyerMessage() {
     var destinataire = document.getElementById("dest").value;
     var message = document.getElementById("body").value;
     var Message = "";
-    var msg={};
+    var msg = {};
     if (destinataire != "") {
         var MsgHeader = "Destinataire : " + destinataire;
         if (message != "") {
@@ -69,7 +90,7 @@ function envoyerMessage() {
             msg.dest = "nobody";
             msg.body = Message;
             socket.emit('envoi-message', msg);
-            alert(Message);            
+            alert(Message);
         } else {
             alert("Veuillez remplir le message");
         }

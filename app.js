@@ -15,10 +15,6 @@ app.get('/', (req, res) => {
     });
 });
 
-var successfulLogin = (peer) => {
-    console.log("at succesfulLogin");
-};
-
 var verifyExistence = (peer) => {
     var i = 0;
     var found = false;
@@ -29,13 +25,14 @@ var verifyExistence = (peer) => {
     }
     return found;
 }
-
-io.on('connection', function (socket) { // Quand un nouveau 'client' se connecte !
-    console.log('a user connected !');
-    // actualiser_liste_pairs();
-    socket.on('envoi-message', (msg) => {
-
-    });
+var succesfulLogin = (socket) => {
+    lesPairs.forEach((p) => {
+        socket.emit('updateSelect', p)
+    })
+}
+io.on('connection', function (socket) {
+    // socket.emit('test')
+    // socket.on('envoi-message', (msg) => {});
     socket.on('logIn', (pseudo, stringId) => {
         if (pseudo) {
             if (!stringId) { // New peer
@@ -44,6 +41,7 @@ io.on('connection', function (socket) { // Quand un nouveau 'client' se connecte
                     "id": id++
                 };
                 lesPairs.push(new_peer);
+                succesfulLogin(socket);
                 socket.emit('added', new_peer);
             } else { // Existing peer, maybe , should check his existence.
                 var peer = {
@@ -51,7 +49,7 @@ io.on('connection', function (socket) { // Quand un nouveau 'client' se connecte
                     "id": Number(stringId)
                 }
                 if (verifyExistence(peer)) { // peer exists
-                    successfulLogin(peer); // Do the normal stuff ie : Collect messages and such
+                    succesfulLogin(socket); // Do the normal stuff ie : Collect messages and such
                     socket.emit('exists', peer);
                 } else {
                     socket.emit('peerNotFound');
