@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 });
 
 var successfulLogin = (peer) => {
-
+console.log("at succesfulLogin");
 };
 
 var verifyExistence = (peer) => {
@@ -32,25 +32,32 @@ io.on('connection', function (socket) { // Quand un nouveau 'client' se connecte
     socket.on('envoi-message', (msg) => {
 
     });
-    socket.on('logIn', (pseudo, stringId) => { // Detecte qaund un client entre son pseudo TODO voir si le pseudo est dans la liste existante, 
-        // si oui chercher ses messages
+    socket.on('logIn', (pseudo, stringId) => {
         if (pseudo) {
-            if (!stringId) {
-                // New peer
-            } else {
-                // Existing peer, maybe , should check his existence.
+            if (!stringId) {                 // New peer
+                var new_peer = {
+                    "peer_pseudo": pseudo,
+                    "id": id++
+                };
+                lesPairs.push(new_peer);
+            } else {                         // Existing peer, maybe , should check his existence.
                 var peer = {
                     "peer_pseudo": pseudo,
                     "id": Number(stringId)
                 }
-                if (verifyExistence(peer)) { // To verify if peer exists
-                    // peer exists
-                    successfulLogin(peer); // Do the normal stuff ie : Collect messages
+                if (verifyExistence(peer)) { // peer exists
+                    successfulLogin(peer);   // Do the normal stuff ie : Collect messages and such
+                } else {
+                    socket.emit('peerNotFound');
                 }
             }
+        }else{
+            socket.emit('pseudoMissing')
         }
     });
 });
+
+
 http.listen(3030, () => {
-    console.log('listening . . .  on localhost:3030');
+    console.log('listening on localhost:3030 ... ');
 });
