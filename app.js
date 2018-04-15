@@ -44,8 +44,8 @@ io.on('connection', function (socket) {
                 };
                 lesPairs.push(new_peer);
                 socket.emit('added', new_peer);
-                succesfulLogin();
                 socket.emit('loginOk',new_peer);
+                succesfulLogin();
             } else { // Existing peer, maybe , should check his existence.
                 var peer = {
                     "peer_pseudo": pseudo,
