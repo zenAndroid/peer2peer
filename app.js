@@ -5,7 +5,12 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 app.use(express.static('static_assets'));
-var tousLesMessages = []; // un message a un "dest" et un "body"
+if (fs.existsSync("messages.json")) {
+    var tousLesMessagesRawBytes = fs.readFileSync('messages.json');
+    var tousLesMessages = JSON.parse(tousLesMessagesRawBytes);
+} else {
+    var tousLesMessages = []; // un message a un "dest" et un "body" 
+}
 var id = 1; // pour donner des ids
 var lesPairs = []; // un pair := {"id": int,"pseudo":String}
 
@@ -33,7 +38,7 @@ io.on('connection', function (socket) {
     // socket.emit('test')
     socket.on('envoi-message', (msg) => {
         tousLesMessages.push(msg); // Ajout du message dans la variable globale
-        io.emit('nouveau-message',tousLesMessages);
+        io.emit('nouveau-message', tousLesMessages);
     });
     socket.on('logIn', (pseudo, stringId) => {
         if (pseudo) {
@@ -44,7 +49,7 @@ io.on('connection', function (socket) {
                 };
                 lesPairs.push(new_peer);
                 socket.emit('added', new_peer);
-                socket.emit('loginOk',new_peer);
+                socket.emit('loginOk', new_peer);
                 succesfulLogin();
             } else { // Existing peer, maybe , should check his existence.
                 var peer = {
@@ -54,7 +59,7 @@ io.on('connection', function (socket) {
                 if (verifyExistence(peer)) { // peer exists
                     succesfulLogin(); // Do the normal stuff ie : Collect messages and such
                     // socket.emit('exists', peer);
-                    socket.emit('loginOk',peer);
+                    socket.emit('loginOk', peer);
                 } else {
                     socket.emit('peerNotFound');
                 }
