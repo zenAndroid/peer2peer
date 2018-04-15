@@ -9,9 +9,7 @@ html
         script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js")
         script(src="client.js")
         script(defer).
-                var pseudo = prompt("Votre pseudonyme :");
-                var string_id = prompt("Votre id, si vous en avez un :");
-                socket.emit('logIn', pseudo, string_id);
+                inputCredentials();
 
     body
         div.container
