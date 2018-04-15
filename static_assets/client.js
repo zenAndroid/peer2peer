@@ -3,22 +3,29 @@ var socket = io();
 var thisSocket = {};
 
 // Events that will be recieved from the server
-socket.on('loginOk', (peer) => {
-    var headerText = document.getElementsByTagName("header")[0].innerText;
-    thisSocket.peer_pseudo = peer.peer_pseudo;
-    thisSocket.id = peer.id;
-    headerText += " - Connecté en tant que : '" + thisSocket.peer_pseudo + "' avec ID : " + thisSocket.id + ".";
-    document.getElementsByTagName("header")[0].innerText = headerText;
-})
-socket.on('added', (peer) => {
-    alert("Vous êtes l'utilisateur " + peer.peer_pseudo + " et votre ID est : " + peer.id);
-});
+socket.on('loginOk',loginOk)
+socket.on('added', added);
+socket.on('updateSelect', updateSelect);
+socket.on('updatePeerList', updatePeerList);
+socket.on('nouveau-message', nouveauMessage);
 
 // socket.on('exists', (peer) => {
 //     alert('Peer exists');
 // });
 
-socket.on('updateSelect', (peerList) => {
+function loginOk(peer){
+    var headerText = document.getElementsByTagName("header")[0].innerText;
+    thisSocket.peer_pseudo = peer.peer_pseudo;
+    thisSocket.id = peer.id;
+    headerText += " - Connecté en tant que : '" + thisSocket.peer_pseudo + "' avec ID : " + thisSocket.id + ".";
+    document.getElementsByTagName("header")[0].innerText = headerText;
+}
+
+function added(peer){
+    alert("Vous êtes l'utilisateur " + peer.peer_pseudo + " et votre ID est : " + peer.id);
+    alert("SVP, rappelez vous de votre id, vous en aurez besoin pour vous connecter");
+}
+function updateSelect(peerList) {
     var originalSelect = document.getElementById('peerSelect');
     var newSelect = document.createElement("select");
     newSelect.setAttribute("id", "peerSelect");
@@ -32,8 +39,9 @@ socket.on('updateSelect', (peerList) => {
         newSelect.add(option);
     }
     originalSelect.replaceWith(newSelect);
-});
-socket.on('updatePeerList', (peerList) => {
+}
+
+function updatePeerList(peerList) {
     var originalList = document.getElementById("listeContact");
     var newList = document.createElement("ul");
     newList.setAttribute("id", "listeContact");
@@ -45,9 +53,9 @@ socket.on('updatePeerList', (peerList) => {
         newList.appendChild(pair);
     }
     originalList.replaceWith(newList)
-});
+}
 
-socket.on('nouveau-message', (msg) => {
+function nouveauMessage(listeMessages) {
     var originalTable = document.getElementById("tableDeMessages");
     var newTable = document.createElement("table");
     newTable.setAttribute("id", "tableDeMessages");
@@ -56,47 +64,39 @@ socket.on('nouveau-message', (msg) => {
     var cell2 = row.insertCell(1);
     cell1.innerHTML = "Auteur";
     cell2.innerHTML = "Contenu du message";
-    for (var i = 0; i < msg.length; i++) {
+    for (var i = 0; i < listeMessages.length; i++) {
         var row = newTable.insertRow(1);
-        if (msg[i].dest.peer_pseudo == thisSocket.peer_pseudo && msg[i].dest.id == thisSocket.id) {
+        if (listeMessages[i].dest.peer_pseudo == thisSocket.peer_pseudo && listeMessages[i].dest.id == thisSocket.id) {
             var autheur = row.insertCell(0)
             var contenu = row.insertCell(1)
-            autheur.innerText = "ID : " + msg[i].sender.id + ", nom: " + msg[i].sender.peer_pseudo + ".";
-            contenu.innerText = msg[i].body
+            autheur.innerText = "ID : " + listeMessages[i].sender.id + ", nom: " + listeMessages[i].sender.peer_pseudo + ".";
+            contenu.innerText = listeMessages[i].body
         }
     }
     originalTable.replaceWith(newTable);
-})
-/*
- * Fonction qui affiche le bloc correspandant
- */
+}
+
 function afficherAcceuil() {
     document.getElementById('acceuil').style.display = "block";
     document.getElementById('nouveau').style.display = "none";
     document.getElementById('messages').style.display = "none";
     document.getElementById('contacts').style.display = "none";
 }
-/*
- * Fonction qui affiche le bloc correspandant
- */
+
 function afficherMessages() {
     document.getElementById('acceuil').style.display = "none";
     document.getElementById('nouveau').style.display = "none";
     document.getElementById('messages').style.display = "block";
     document.getElementById('contacts').style.display = "none";
 }
-/*
- * Fonction qui affiche le bloc correspandant
- */
+
 function afficherNouveau() {
     document.getElementById('acceuil').style.display = "none";
     document.getElementById('nouveau').style.display = "block";
     document.getElementById('messages').style.display = "none";
     document.getElementById('contacts').style.display = "none";
 }
-/*
- * Fonction qui affiche le bloc correspandant
- */
+
 function afficherAdresses() {
     document.getElementById('acceuil').style.display = "none";
     document.getElementById('nouveau').style.display = "none";
@@ -114,23 +114,19 @@ function envoyerMessage() {
         "id": destinataireId
     }
     var contenu = document.getElementById("body").value;
-    var msg = {};
+    var listeMessages = {};
     if (destinatairePseudo != "") {
         if (contenu != "") {
             // document.getElementById("dest").value = "";
             document.getElementById("body").value = "";
-            msg.sender = thisSocket;
-            console.log("DEBUG1 thisSocket "+ thisSocket.peer_pseudo)    
-            msg.dest = destinataire;
-            console.log("DEBUG2 destinataire " + destinataire.peer_pseudo) 
-            msg.body = contenu;
-            console.log("DEBUG3 contenu " + contenu)
-
-            socket.emit('envoi-message', msg);
+            listeMessages.sender = thisSocket;
+            listeMessages.dest = destinataire;
+            listeMessages.body = contenu;
+            socket.emit('envoi-message', listeMessages);
         } else {
             alert("Veuillez remplir le message");
         }
     } else {
-        alert("Veuillez entrez le nom du destinataire !");
+        alert("Veuillez selectionnez un destinataire !");
     }
 }

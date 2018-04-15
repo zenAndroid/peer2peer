@@ -67,7 +67,7 @@ io.on('connection', function (socket) {
                     "id": id++
                 };
                 var idData = JSON.stringify(id);
-                fs.writeFileSync("id.json",id)
+                fs.writeFileSync("id.json", id)
                 lesPairs.push(new_peer);
                 var peerData = JSON.stringify(lesPairs, null, 2);
                 fs.writeFileSync("pairs.json", peerData);
