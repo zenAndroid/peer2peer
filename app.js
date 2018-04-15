@@ -6,7 +6,7 @@ var io = require('socket.io')(http);
 
 app.use(express.static('static_assets'));
 var tousLesMessages = []; // un message a un "dest" et un "body"
-var id = 0; // pour donner des ids
+var id = 1; // pour donner des ids
 var lesPairs = []; // un pair := {"id": int,"pseudo":String}
 
 app.get('/', (req, res) => {
