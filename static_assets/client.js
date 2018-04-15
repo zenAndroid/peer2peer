@@ -7,12 +7,6 @@ socket.on('added', (peer) => {
 // socket.on('exists', (peer) => {
 //     alert('Peer exists');
 // });
-socket.on('test', () => {
-    appendPeerSelect({
-        "peer_pseudo": "amine",
-        "id": 9001
-    });
-});
 
 socket.on('updateSelect', (peerList) => {
     var originalSelect = document.getElementById('peerSelect');
@@ -76,19 +70,6 @@ function afficherAdresses() {
     document.getElementById('nouveau').style.display = "none";
     document.getElementById('messages').style.display = "none";
     document.getElementById('contacts').style.display = "block";
-}
-
-function ajouterContact() {
-    var li = document.createElement("li");
-    var nomContact = document.getElementById("pseudo").value;
-    if (nomContact != "") {
-        li.innerText = nomContact;
-        var ul = document.getElementById("listeContact");
-        ul.appendChild(li);
-        document.getElementById("pseudo").value = "";
-    } else {
-        alert("Veuillez donnez le nom du contact");
-    }
 }
 
 function envoyerMessage() {
