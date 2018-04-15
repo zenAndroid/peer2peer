@@ -82,7 +82,7 @@ io.on('connection', function (socket) {
                 if (verifyExistence(peer)) { // peer exists
                     succesfulLogin(); // Do the normal stuff ie : Collect messages and such
                     // socket.emit('exists', peer);
-                    socket.emit('loginOk', peer);
+                    socket.emit('loginOk', peer, tousLesMessages);
                 } else {
                     socket.emit('peerNotFound');
                 }

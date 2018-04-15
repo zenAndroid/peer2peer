@@ -13,12 +13,13 @@ socket.on('nouveau-message', nouveauMessage);
 //     alert('Peer exists');
 // });
 
-function loginOk(peer){
+function loginOk(peer,listeMessages){
     var headerText = document.getElementsByTagName("header")[0].innerText;
     thisSocket.peer_pseudo = peer.peer_pseudo;
     thisSocket.id = peer.id;
     headerText += " - Connecté en tant que : '" + thisSocket.peer_pseudo + "' avec ID : " + thisSocket.id + ".";
     document.getElementsByTagName("header")[0].innerText = headerText;
+    nouveauMessage(listeMessages);
 }
 
 function added(peer){
