@@ -1,5 +1,11 @@
 "use strict";
 var socket = io();
+
+function inputCredentials() {
+    var pseudo = prompt("Votre pseudonyme :");
+    var string_id = prompt("Votre id, si vous en avez un :");
+    socket.emit('logIn', pseudo, string_id);
+};
 // Events that will be recieved from the server
 socket.on('added', (peer) => {
     alert("Vous êtes l'utilisateur " + peer.peer_pseudo + " et votre ID est : " + peer.id);
@@ -16,8 +22,9 @@ socket.on('updateSelect', (peerList) => {
         var pseudo = peerList[i].peer_pseudo;
         var id = peerList[i].id;
         var option = document.createElement("option");
-        option.setAttribute("value", id);
-        option.text = "ID : " + id +", nom: " + pseudo + ".";
+        option.setAttribute("data-id", id);
+        option.setAttribute("data-pseudo", pseudo);
+        option.text = "ID : " + id + ", nom: " + pseudo + ".";
         newSelect.add(option);
     }
     originalSelect.replaceWith(newSelect);
@@ -30,7 +37,7 @@ socket.on('updatePeerList', (peerList) => {
         var pseudo = peerList[i].peer_pseudo;
         var id = peerList[i].id;
         var pair = document.createElement("li");
-        pair.innerText = "ID : " + peerList[i].id +", nom: " + peerList[i].peer_pseudo + ".";
+        pair.innerText = "ID : " + peerList[i].id + ", nom: " + peerList[i].peer_pseudo + ".";
         newList.appendChild(pair);
     }
     originalList.replaceWith(newList)
@@ -75,8 +82,8 @@ function afficherAdresses() {
 function envoyerMessage() {
     var comboBox = document.getElementById("peerSelect");
     var selection = comboBox.options[comboBox.selectedIndex];
-    var destinatairePseudo = selection.text;
-    var destinataireId = Number(selection.value);
+    var destinatairePseudo = selection.dataset.pseudo;
+    var destinataireId = Number(selection.dataset.id);
     var destinataire = {
         "peer_pseudo": destinatairePseudo,
         "id": destinataireId
@@ -84,7 +91,7 @@ function envoyerMessage() {
     var contenu = document.getElementById("body").value;
     var msg = {};
     if (destinataire != "") {
-        if (msg != "") {
+        if (contenu != "") {
             // document.getElementById("dest").value = "";
             document.getElementById("body").value = "";
             msg.dest = destinataire;
