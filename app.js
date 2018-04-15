@@ -32,7 +32,8 @@ var succesfulLogin = () => {
 io.on('connection', function (socket) {
     // socket.emit('test')
     socket.on('envoi-message', (msg) => {
-        console.log(msg)
+        tousLesMessages.push(msg); // Ajout du message dans la variable globale
+        io.emit('nouveau-message',tousLesMessages);
     });
     socket.on('logIn', (pseudo, stringId) => {
         if (pseudo) {
