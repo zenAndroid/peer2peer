@@ -1,18 +1,28 @@
 var express = require("express");
-var fs = require('fs'); // for persistance
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var fs = require('fs'); // for persistance
 
 app.use(express.static('static_assets'));
 if (fs.existsSync("messages.json")) {
     var tousLesMessagesRawBytes = fs.readFileSync('messages.json');
     var tousLesMessages = JSON.parse(tousLesMessagesRawBytes);
 } else {
-    var tousLesMessages = []; // un message a un "dest" et un "body" 
+    var tousLesMessages = [];
 }
-var id = 1; // pour donner des ids
-var lesPairs = []; // un pair := {"id": int,"pseudo":String}
+if (fs.existsSync("id.json")) {
+    var idRawBytes = fs.readFileSync("id.json");
+    var id = JSON.parse(idRawBytes);
+} else {
+    var id = 1;
+}
+if (fs.existsSync("pairs.json")) {
+    var peersRawBytes = fs.readFileSync("pairs.json");
+    var lesPairs = JSON.parse(peersRawBytes);
+} else {
+    var lesPairs = [];
+}
 
 app.get('/', (req, res) => {
     res.render('courriel.pug', {
@@ -38,6 +48,8 @@ io.on('connection', function (socket) {
     // socket.emit('test')
     socket.on('envoi-message', (msg) => {
         tousLesMessages.push(msg); // Ajout du message dans la variable globale
+        var messageData = JSON.stringify(tousLesMessages, null, 4);
+        fs.writeFileSync("messages.json", messageData);
         io.emit('nouveau-message', tousLesMessages);
     });
     socket.on('logIn', (pseudo, stringId) => {
