@@ -17,7 +17,7 @@ socket.on('updateSelect', (peerList) => {
         var id = peerList[i].id;
         var option = document.createElement("option");
         option.setAttribute("value", id);
-        option.text = pseudo + " avec l'id " + id;
+        option.text = "ID : " + id +", nom: " + pseudo + ".";
         newSelect.add(option);
     }
     originalSelect.replaceWith(newSelect);
@@ -73,21 +73,23 @@ function afficherAdresses() {
 }
 
 function envoyerMessage() {
-    var destinataire = document.getElementById("dest").value;
-    var message = document.getElementById("body").value;
-    var Message = "";
+    var comboBox = document.getElementById("peerSelect");
+    var selection = comboBox.options[comboBox.selectedIndex];
+    var destinatairePseudo = selection.text;
+    var destinataireId = Number(selection.value);
+    var destinataire = {
+        "peer_pseudo": destinatairePseudo,
+        "id": destinataireId
+    }
+    var contenu = document.getElementById("body").value;
     var msg = {};
     if (destinataire != "") {
-        var MsgHeader = "Destinataire : " + destinataire;
-        if (message != "") {
-            var MsgBody = "Message : " + message;
-            Message = MsgHeader + '\n' + MsgBody;
-            document.getElementById("dest").value = "";
+        if (msg != "") {
+            // document.getElementById("dest").value = "";
             document.getElementById("body").value = "";
-            msg.dest = "nobody";
-            msg.body = Message;
+            msg.dest = destinataire;
+            msg.body = contenu;
             socket.emit('envoi-message', msg);
-            alert(Message);
         } else {
             alert("Veuillez remplir le message");
         }
