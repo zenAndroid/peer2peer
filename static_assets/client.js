@@ -7,9 +7,11 @@ function inputCredentials() {
     socket.emit('logIn', pseudo, string_id);
 };
 // Events that will be recieved from the server
+
 socket.on('added', (peer) => {
     alert("Vous êtes l'utilisateur " + peer.peer_pseudo + " et votre ID est : " + peer.id);
 });
+
 // socket.on('exists', (peer) => {
 //     alert('Peer exists');
 // });
@@ -42,6 +44,12 @@ socket.on('updatePeerList', (peerList) => {
     }
     originalList.replaceWith(newList)
 });
+
+socket.on('nouveau-message',(msg)=>{
+    msg.forEach(element => {
+        
+    });
+})
 /*
  * Fonction qui affiche le bloc correspandant
  */
