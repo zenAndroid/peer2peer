@@ -31,7 +31,9 @@ var succesfulLogin = () => {
 }
 io.on('connection', function (socket) {
     // socket.emit('test')
-    // socket.on('envoi-message', (msg) => {});
+    socket.on('envoi-message', (msg) => {
+        console.log(msg)
+    });
     socket.on('logIn', (pseudo, stringId) => {
         if (pseudo) {
             if (!stringId) { // New peer
