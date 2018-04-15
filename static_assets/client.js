@@ -51,8 +51,13 @@ socket.on('nouveau-message', (msg) => {
     var originalTable = document.getElementById("tableDeMessages");
     var newTable = document.createElement("table");
     newTable.setAttribute("id", "tableDeMessages");
+    var row = newTable.insertRow(0);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    cell1.innerHTML = "Auteur";
+    cell2.innerHTML = "Contenu du message";
     for (var i = 0; i < msg.length; i++) {
-        var row = newTable.insertRow(0);
+        var row = newTable.insertRow(1);
         if (msg[i].dest.peer_pseudo == thisSocket.peer_pseudo && msg[i].dest.id == thisSocket.id) {
             var autheur = row.insertCell(0)
             var contenu = row.insertCell(1)
@@ -116,10 +121,7 @@ function envoyerMessage() {
             document.getElementById("body").value = "";
             msg.sender = thisSocket;
             console.log("DEBUG1 thisSocket "+ thisSocket.peer_pseudo)    
-            msg.dest = {
-                "peer_pseudo": destinatairePseudo,
-                "id": destinataireId
-            }
+            msg.dest = destinataire;
             console.log("DEBUG2 destinataire " + destinataire.peer_pseudo) 
             msg.body = contenu;
             console.log("DEBUG3 contenu " + contenu)
@@ -130,22 +132,5 @@ function envoyerMessage() {
         }
     } else {
         alert("Veuillez entrez le nom du destinataire !");
-    }
-}
-
-function ajouterMessage() {
-    var table = document.getElementById("tableDeMessages");
-    var auteur_string = document.getElementById("auteur").value;
-    var message_body = document.getElementById("messages_body").value;
-    if (auteur_string != "" && message_body != "") {
-        var row = table.insertRow(1);
-        var auteur = row.insertCell(0);
-        var message = row.insertCell(1);
-        auteur.innerText = auteur_string;
-        message.innerText = message_body;
-        document.getElementById("auteur").value = "";
-        document.getElementById("messages_body").value = "";
-    } else {
-        alert("Veuiller remplir tout les champs !");
     }
 }
