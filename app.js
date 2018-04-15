@@ -4,31 +4,38 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require('fs'); // for persistance
 
+// Utiliser 'static_assets' comme répertoire pour fichiers statiques (*.css, *.js, etc)
 app.use(express.static('static_assets'));
-if (fs.existsSync("messages.json")) {
-    var tousLesMessagesRawBytes = fs.readFileSync('messages.json');
-    var tousLesMessages = JSON.parse(tousLesMessagesRawBytes);
-} else {
-    var tousLesMessages = [];
-}
-if (fs.existsSync("id.json")) {
-    var idRawBytes = fs.readFileSync("id.json");
-    var id = JSON.parse(idRawBytes);
-} else {
-    var id = 1;
-}
-if (fs.existsSync("pairs.json")) {
-    var peersRawBytes = fs.readFileSync("pairs.json");
-    var lesPairs = JSON.parse(peersRawBytes);
-} else {
-    var lesPairs = [];
-}
 
+// Utiliser 'pug' pour la page d'acceuil.
 app.get('/', (req, res) => {
     res.render('courriel.pug', {
         pretty: true
     });
 });
+
+// Déclaration des variables id, messages et pairs.
+var id;
+var tousLesMessages;
+var lesPairs;
+if (fs.existsSync("messages.json")) {
+    var tousLesMessagesRawBytes = fs.readFileSync('messages.json');
+    tousLesMessages = JSON.parse(tousLesMessagesRawBytes);
+} else {
+    tousLesMessages = [];
+}
+if (fs.existsSync("id.json")) {
+    var idRawBytes = fs.readFileSync("id.json");
+    id = JSON.parse(idRawBytes);
+} else {
+    id = 1;
+}
+if (fs.existsSync("pairs.json")) {
+    var peersRawBytes = fs.readFileSync("pairs.json");
+    lesPairs = JSON.parse(peersRawBytes);
+} else {
+    lesPairs = [];
+}
 
 var verifyExistence = (peer) => {
     var i = 0;
@@ -59,7 +66,11 @@ io.on('connection', function (socket) {
                     "peer_pseudo": pseudo,
                     "id": id++
                 };
+                var idData = JSON.stringify(id);
+                fs.writeFileSync("id.json",id)
                 lesPairs.push(new_peer);
+                var peerData = JSON.stringify(lesPairs, null, 2);
+                fs.writeFileSync("pairs.json", peerData);
                 socket.emit('added', new_peer);
                 socket.emit('loginOk', new_peer);
                 succesfulLogin();
