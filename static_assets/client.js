@@ -2,13 +2,13 @@
 var socket = io();
 var thisSocket = {};
 
-function peerEquality(Fpeer,Speer){
-    return (Fpeer.peer_pseudo == Speer.peer_pseudo && Fpeer.id == Speer.id);
-}
 // Events that will be recieved from the server
-socket.on('loginOk',(peer)=>{
+socket.on('loginOk', (peer) => {
+    var headerText = document.getElementsByTagName("header")[0].innerText;
     thisSocket.peer_pseudo = peer.peer_pseudo;
     thisSocket.id = peer.id;
+    headerText += " - Connecté en tant que : '" + thisSocket.peer_pseudo + "' avec ID : " + thisSocket.id + ".";
+    document.getElementsByTagName("header")[0].innerText = headerText;
 })
 socket.on('added', (peer) => {
     alert("Vous êtes l'utilisateur " + peer.peer_pseudo + " et votre ID est : " + peer.id);
@@ -47,19 +47,20 @@ socket.on('updatePeerList', (peerList) => {
     originalList.replaceWith(newList)
 });
 
-socket.on('nouveau-message',(msg)=>{
+socket.on('nouveau-message', (msg) => {
     var originalTable = document.getElementById("tableDeMessages");
     var newTable = document.createElement("table");
-    newTable.setAttribute("id","tableDeMessages");
-    for(var i =0;i<msg.length;i++){
-        var row = table.insertRow();
-        if (peerEquality(msg.dest,{"peer_pseudo":_pseudo,"id":_id})){
+    newTable.setAttribute("id", "tableDeMessages");
+    for (var i = 0; i < msg.length; i++) {
+        var row = newTable.insertRow(0);
+        if (msg[i].dest.peer_pseudo == thisSocket.peer_pseudo && msg[i].dest.id == thisSocket.id) {
             var autheur = row.insertCell(0)
             var contenu = row.insertCell(1)
-            autheur.innerText = "ID : " + _id + ", nom: " + _pseudo + ".";
-            message.innerText = msg.body
+            autheur.innerText = "ID : " + msg[i].sender.id + ", nom: " + msg[i].sender.peer_pseudo + ".";
+            contenu.innerText = msg[i].body
         }
     }
+    originalTable.replaceWith(newTable);
 })
 /*
  * Fonction qui affiche le bloc correspandant
@@ -109,13 +110,19 @@ function envoyerMessage() {
     }
     var contenu = document.getElementById("body").value;
     var msg = {};
-    if (destinataire != "") {
+    if (destinatairePseudo != "") {
         if (contenu != "") {
             // document.getElementById("dest").value = "";
             document.getElementById("body").value = "";
             msg.sender = thisSocket;
-            msg.dest = destinataire;
+            console.log("DEBUG1 thisSocket "+ thisSocket.peer_pseudo)    
+            msg.dest = {
+                "peer_pseudo": destinatairePseudo,
+                "id": destinataireId
+            }
+            console.log("DEBUG2 destinataire " + destinataire.peer_pseudo) 
             msg.body = contenu;
+            console.log("DEBUG3 contenu " + contenu)
 
             socket.emit('envoi-message', msg);
         } else {
@@ -128,7 +135,6 @@ function envoyerMessage() {
 
 function ajouterMessage() {
     var table = document.getElementById("tableDeMessages");
-
     var auteur_string = document.getElementById("auteur").value;
     var message_body = document.getElementById("messages_body").value;
     if (auteur_string != "" && message_body != "") {
