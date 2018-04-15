@@ -1,13 +1,15 @@
 "use strict";
 var socket = io();
+var thisSocket = {};
 
-function inputCredentials() {
-    var pseudo = prompt("Votre pseudonyme :");
-    var string_id = prompt("Votre id, si vous en avez un :");
-    socket.emit('logIn', pseudo, string_id);
-};
+function peerEquality(Fpeer,Speer){
+    return (Fpeer.peer_pseudo == Speer.peer_pseudo && Fpeer.id == Speer.id);
+}
 // Events that will be recieved from the server
-
+socket.on('loginOk',(peer)=>{
+    thisSocket.peer_pseudo = peer.peer_pseudo;
+    thisSocket.id = peer.id;
+})
 socket.on('added', (peer) => {
     alert("Vous êtes l'utilisateur " + peer.peer_pseudo + " et votre ID est : " + peer.id);
 });
@@ -46,9 +48,18 @@ socket.on('updatePeerList', (peerList) => {
 });
 
 socket.on('nouveau-message',(msg)=>{
-    msg.forEach(element => {
-        
-    });
+    var originalTable = document.getElementById("tableDeMessages");
+    var newTable = document.createElement("table");
+    newTable.setAttribute("id","tableDeMessages");
+    for(var i =0;i<msg.length;i++){
+        var row = table.insertRow();
+        if (peerEquality(msg.dest,{"peer_pseudo":_pseudo,"id":_id})){
+            var autheur = row.insertCell(0)
+            var contenu = row.insertCell(1)
+            autheur.innerText = "ID : " + _id + ", nom: " + _pseudo + ".";
+            message.innerText = msg.body
+        }
+    }
 })
 /*
  * Fonction qui affiche le bloc correspandant
@@ -102,8 +113,10 @@ function envoyerMessage() {
         if (contenu != "") {
             // document.getElementById("dest").value = "";
             document.getElementById("body").value = "";
+            msg.sender = thisSocket;
             msg.dest = destinataire;
             msg.body = contenu;
+
             socket.emit('envoi-message', msg);
         } else {
             alert("Veuillez remplir le message");
