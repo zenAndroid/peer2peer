@@ -25,10 +25,9 @@ var verifyExistence = (peer) => {
     }
     return found;
 }
-var succesfulLogin = (socket) => {
-    lesPairs.forEach((p) => {
-        io.emit('updateSelect', p)
-    })
+var succesfulLogin = () => {
+    io.emit('updateSelect', lesPairs);
+    io.emit('updatePeerList', lesPairs);
 }
 io.on('connection', function (socket) {
     // socket.emit('test')
@@ -41,16 +40,16 @@ io.on('connection', function (socket) {
                     "id": id++
                 };
                 lesPairs.push(new_peer);
-                succesfulLogin(socket);
                 socket.emit('added', new_peer);
+                succesfulLogin();
             } else { // Existing peer, maybe , should check his existence.
                 var peer = {
                     "peer_pseudo": pseudo,
                     "id": Number(stringId)
                 }
                 if (verifyExistence(peer)) { // peer exists
-                    succesfulLogin(socket); // Do the normal stuff ie : Collect messages and such
-                    socket.emit('exists', peer);
+                    succesfulLogin(); // Do the normal stuff ie : Collect messages and such
+                    // socket.emit('exists', peer);
                 } else {
                     socket.emit('peerNotFound');
                 }
