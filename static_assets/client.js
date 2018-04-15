@@ -1,60 +1,76 @@
+"use strict";
 var socket = io();
 // Events that will be recieved from the server
 socket.on('added', (peer) => {
-    alert('Added new peer');
-    alert(peer.peer_pseudo);
-    alert(peer.id)
+    alert("Vous êtes l'utilisateur " + peer.peer_pseudo + " et votre ID est : " + peer.id);
 });
-socket.on('exists', (peer) => {
-    alert('Peer exists')
-    alert(peer.peer_pseudo);
-    alert(peer.id)
-});
-socket.on('peerNotFound', (p) => {
-    alert('peerNotFound');
-});
+// socket.on('exists', (peer) => {
+//     alert('Peer exists');
+// });
 socket.on('test', () => {
     appendPeerSelect({
         "peer_pseudo": "amine",
         "id": 9001
     });
-})
+});
 
-socket.on('updateSelect',(peer)=>{
-    appendPeerSelect(peer);
-})
-
-function appendPeerSelect(peer) {
-    var pseudo = peer.peer_pseudo;
-    var id = peer.id;
-    var select = document.getElementById('peerSelect');
-    var option = document.createElement("option");
-    option.setAttribute("value", id);
-    option.text = pseudo + " avec l'id " + id;
-    select.add(option);
-}
-
+socket.on('updateSelect', (peerList) => {
+    var originalSelect = document.getElementById('peerSelect');
+    var newSelect = document.createElement("select");
+    newSelect.setAttribute("id", "peerSelect");
+    for (var i = 0; i < peerList.length; i++) {
+        var pseudo = peerList[i].peer_pseudo;
+        var id = peerList[i].id;
+        var option = document.createElement("option");
+        option.setAttribute("value", id);
+        option.text = pseudo + " avec l'id " + id;
+        newSelect.add(option);
+    }
+    originalSelect.replaceWith(newSelect);
+});
+socket.on('updatePeerList', (peerList) => {
+    var originalList = document.getElementById("listeContact");
+    var newList = document.createElement("ul");
+    newList.setAttribute("id", "listeContact");
+    for (var i = 0; i < peerList.length; i++) {
+        var pseudo = peerList[i].peer_pseudo;
+        var id = peerList[i].id;
+        var pair = document.createElement("li");
+        pair.innerText = "ID : " + peerList[i].id +", nom: " + peerList[i].peer_pseudo + ".";
+        newList.appendChild(pair);
+    }
+    originalList.replaceWith(newList)
+});
+/*
+ * Fonction qui affiche le bloc correspandant
+ */
 function afficherAcceuil() {
     document.getElementById('acceuil').style.display = "block";
     document.getElementById('nouveau').style.display = "none";
     document.getElementById('messages').style.display = "none";
     document.getElementById('contacts').style.display = "none";
 }
-
+/*
+ * Fonction qui affiche le bloc correspandant
+ */
 function afficherMessages() {
     document.getElementById('acceuil').style.display = "none";
     document.getElementById('nouveau').style.display = "none";
     document.getElementById('messages').style.display = "block";
     document.getElementById('contacts').style.display = "none";
 }
-
+/*
+ * Fonction qui affiche le bloc correspandant
+ */
 function afficherNouveau() {
     document.getElementById('acceuil').style.display = "none";
     document.getElementById('nouveau').style.display = "block";
     document.getElementById('messages').style.display = "none";
     document.getElementById('contacts').style.display = "none";
 }
-
+/*
+ * Fonction qui affiche le bloc correspandant
+ */
 function afficherAdresses() {
     document.getElementById('acceuil').style.display = "none";
     document.getElementById('nouveau').style.display = "none";
