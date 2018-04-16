@@ -26,18 +26,24 @@ app.get('/peers',(req,res)=>{
 var id;
 var tousLesMessages;
 var lesPairs;
+// Chargements des données à partir des fichiers locaux, s'il existent, sinon
+// on les initialise avec des valeurs par défaut
 if (fs.existsSync("messages.json")) {
     var tousLesMessagesRawBytes = fs.readFileSync('messages.json');
     tousLesMessages = JSON.parse(tousLesMessagesRawBytes);
 } else {
     tousLesMessages = [];
 }
+// Chargements des données à partir des fichiers locaux, s'il existent, sinon
+// on les initialise avec des valeurs par défaut
 if (fs.existsSync("id.json")) {
     var idRawBytes = fs.readFileSync("id.json");
     id = JSON.parse(idRawBytes);
 } else {
     id = 1;
 }
+// Chargements des données à partir des fichiers locaux, s'il existent, sinon
+// on les initialise avec des valeurs par défaut
 if (fs.existsSync("pairs.json")) {
     var peersRawBytes = fs.readFileSync("pairs.json");
     lesPairs = JSON.parse(peersRawBytes);
