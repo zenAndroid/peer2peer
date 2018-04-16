@@ -13,6 +13,14 @@ app.get('/', (req, res) => {
         pretty: true
     });
 });
+// Por répondre à GET /messages
+app.get('/messages', (req, res) => {
+    res.json(tousLesMessages);
+});
+// Pour répondre à GET /peers
+app.get('/peers',(req,res)=>{
+    res.json(lesPairs);
+});
 
 // Déclaration des variables id, messages et pairs.
 var id;
@@ -72,7 +80,7 @@ io.on('connection', function (socket) {
                 var peerData = JSON.stringify(lesPairs, null, 2);
                 fs.writeFileSync("pairs.json", peerData);
                 socket.emit('added', new_peer);
-                socket.emit('loginOk', new_peer);
+                socket.emit('loginOk', new_peer, tousLesMessages);
                 succesfulLogin();
             } else { // Existing peer, maybe , should check his existence.
                 var peer = {
