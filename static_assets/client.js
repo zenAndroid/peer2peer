@@ -3,29 +3,27 @@ var socket = io();
 var thisSocket = {};
 
 // Events that will be recieved from the server
-socket.on('loginOk',loginOk)
+socket.on('loginOk', loginOk)
 socket.on('added', added);
 socket.on('updateSelect', updateSelect);
 socket.on('updatePeerList', updatePeerList);
-socket.on('nouveau-message', nouveauMessage);
+socket.on('nouveau-message', verifierMessages);
 
-// socket.on('exists', (peer) => {
-//     alert('Peer exists');
-// });
 
-function loginOk(peer,listeMessages){
+function loginOk(peer, listeMessages) {
     var headerText = document.getElementsByTagName("header")[0].innerText;
     thisSocket.peer_pseudo = peer.peer_pseudo;
     thisSocket.id = peer.id;
     headerText += " - Connecté en tant que : '" + thisSocket.peer_pseudo + "' avec ID : " + thisSocket.id + ".";
     document.getElementsByTagName("header")[0].innerText = headerText;
-    nouveauMessage(listeMessages);
+    verifierMessages(listeMessages);
 }
 
-function added(peer){
+function added(peer) {
     alert("Vous êtes l'utilisateur " + peer.peer_pseudo + " et votre ID est : " + peer.id);
     alert("SVP, rappelez vous de votre id, vous en aurez besoin pour vous connecter");
 }
+
 function updateSelect(peerList) {
     var originalSelect = document.getElementById('peerSelect');
     var newSelect = document.createElement("select");
@@ -56,7 +54,7 @@ function updatePeerList(peerList) {
     originalList.replaceWith(newList)
 }
 
-function nouveauMessage(listeMessages) {
+function verifierMessages(listeMessages) {
     var originalTable = document.getElementById("tableDeMessages");
     var newTable = document.createElement("table");
     newTable.setAttribute("id", "tableDeMessages");
@@ -115,15 +113,15 @@ function envoyerMessage() {
         "id": destinataireId
     }
     var contenu = document.getElementById("body").value;
-    var listeMessages = {};
+    var message = {};
     if (destinatairePseudo != "") {
         if (contenu != "") {
             // document.getElementById("dest").value = "";
             document.getElementById("body").value = "";
-            listeMessages.sender = thisSocket;
-            listeMessages.dest = destinataire;
-            listeMessages.body = contenu;
-            socket.emit('envoi-message', listeMessages);
+            message.sender = thisSocket;
+            message.dest = destinataire;
+            message.body = contenu;
+            socket.emit('envoi-message', message);
         } else {
             alert("Veuillez remplir le message");
         }
