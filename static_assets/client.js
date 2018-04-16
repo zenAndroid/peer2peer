@@ -8,6 +8,8 @@ socket.on('added', added);
 socket.on('updateSelect', updateSelect);
 socket.on('updatePeerList', updatePeerList);
 socket.on('nouveau-message', verifierMessages);
+socket.on('peerNotFound', peerNotFound);
+socket.on('pseudoMissing', pseudoMissing);
 
 
 function loginOk(peer, listeMessages) {
@@ -73,6 +75,15 @@ function verifierMessages(listeMessages) {
         }
     }
     originalTable.replaceWith(newTable);
+}
+
+function peerNotFound() {
+    alert("Pair inexistant, veuillez actualiser la page et entrez vote pseudo avec l'id associé ou, \
+    entrez un pseudo sans l'id pour avoir un nouveau ID");
+}
+
+function pseudoMissing(){
+    alert("Aucun pseudo, veuillez actualiser la page et remplir un pseudo.");
 }
 
 function afficherAcceuil() {
