@@ -3,7 +3,7 @@ var socket = io();
 var thisSocket = {};
 
 // Events that will be recieved from the server
-socket.on('loginOk', loginOk)
+socket.on('loginOk', loginOk);
 socket.on('added', added);
 socket.on('updateSelect', updateSelect);
 socket.on('updatePeerList', updatePeerList);

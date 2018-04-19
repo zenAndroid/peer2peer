@@ -35,8 +35,13 @@ A peer to peer messaging mini-server (Single Page Application) using node.js, ex
 ---
 
 # Les événements :
-| Nom d'événement | Rôle de l'événement |
-| --- | --- |
-| nv_message | Pour indiquer un nouveau message|
-| nv_pair    | Pour indiquer un nouveau pair dans le serveur|
-|logIn| Pour indiquer une connexion|
+
+| Nom d'événement | Rôle de l'événement                                                         |
+| --------------- | --------------------------------------------------------------------------- |
+| loginOk         | Signifie qu'une connexion s'est bien passée                                 |
+| added           | Événement utilisé pour `alert` l'utilisateur de son pseudo et ID            |
+| updateSelect    | Événement utilisé pour mettre à jour le combobox des pairs                  |
+| updatePeerList  | Événement utilisé pour mettre à jour la liste de contacts                   |
+| nouveau-message | Événement qui déclenche la fonction qui vérifie la globalité des messages   |
+| peerNotFound    | Événement pour avertir l'utilisateur                                        |
+| pseudoMissing   | Événement pour avertir l'utilisateur                                        |
