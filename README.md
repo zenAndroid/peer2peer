@@ -12,8 +12,6 @@ A peer to peer messaging mini-server (Single Page Application) using node.js, ex
 ## Accueil :
 
 - Sera la page ou le client va "s'authentifier".
-- lol honestly idk how to do this one
-- ???
 
 
 
