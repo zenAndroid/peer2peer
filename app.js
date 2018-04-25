@@ -18,7 +18,7 @@ app.get('/messages', (req, res) => {
     res.json(tousLesMessages);
 });
 // Pour répondre à GET /peers
-app.get('/peers',(req,res)=>{
+app.get('/peers', (req, res) => {
     res.json(lesPairs);
 });
 
