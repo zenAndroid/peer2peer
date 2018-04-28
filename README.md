@@ -3,6 +3,7 @@ A peer to peer messaging mini-server (Single Page Application) using node.js, ex
 
 #### C'est l'extension (Le projet 2) de [Courriel](https://github.com/zenAndroid/courriel).
 
+## Constituants de l'interface client : (ce que l'on voie sur la page d'accueil)
 1. Accueil
 2. Liste de messages
 3. Nouveau message
@@ -13,6 +14,26 @@ A peer to peer messaging mini-server (Single Page Application) using node.js, ex
 
 - Sera la page ou le client va "s'authentifier".
 
+#### Système d'authentification :
+
+###### Scénario 1 : Première connexion :
+
+Initialement, quand un client X accède au serveur, il est accueillé par un premier Prompt pour
+entrer son pseudonyme, après ça, un autre prompt lui demande un numéro d'identification (nommé ID).
+
+Puisque c'est le premier accès du client X, il ne fournit pas d'ID, et donc le serveur lui en fournit un nouveau.
+
+Une `alert` lui affiche alors son pseudonyme ainsi que son numéro d'identification et lui rappelle
+qu'il doit s'en rappelle obligatoirement pour pouvoir utiliser la messagerie.
+
+###### Scénario 2 : Connexions prochaines :
+
+Lorsque le client est déjà enregistré est qu'il veut accéder à son "compte", il doit fournir son
+pseudonyme et le numéro d'identification que le système lui a fournit.
+
+
+Si le client fournit une valeur d'ID non existante. Le système le notifie et le demande d'actualiser
+la page pour retenter la connection.
 
 
 ## Liste de messages :
