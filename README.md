@@ -40,6 +40,11 @@ la page pour retenter la connection.
 
 - Parcourir la liste globale des messages et afficher ceux qui sont destinés au client.
 
+### Fonctionnement détaillé :
+
+Aprés le succés de connection d'un client, ses coordonées sont stocké dans un objet local `thisSocket`, et 
+alors l'application commence a parcourir l'objet qui stocke tous les messages et affiche tous les messages dont le destinataire est le même que l'utilisateur enregistré dans `thisSocket`.
+
 
 ## Nouveau message :
 
